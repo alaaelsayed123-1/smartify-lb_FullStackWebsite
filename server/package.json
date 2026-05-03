@@ -1,0 +1,44 @@
+{
+  "name": "smartify-backend",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "axios": "^1.14.0",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "form-data": "^4.0.5",
+    "fuse.js": "^7.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.1.1",
+    "mysql2": "^3.20.0",
+    "natural": "^8.1.1",
+    "nodemailer": "^8.0.4",
+    "openai": "^3.2.1",
+    "qrcode-terminal": "^0.12.0",
+    "sentiment": "^5.0.2",
+    "twilio": "^5.13.1",
+    "whatsapp-web.js": "^1.34.6"
+  },
+  "description": "��#\u0000 \u0000S\u0000m\u0000a\u0000r\u0000t\u0000i\u0000f\u0000y\u0000-\u0000L\u0000B\u0000-\u0000B\u0000a\u0000c\u0000k\u0000e\u0000n\u0000d\u0000\r\u0000 \u0000",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mahdichinnawi1-sketch/Smartify-LB-Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mahdichinnawi1-sketch/Smartify-LB-Backend/issues"
+  },
+  "homepage": "https://github.com/mahdichinnawi1-sketch/Smartify-LB-Backend#readme"
+}
