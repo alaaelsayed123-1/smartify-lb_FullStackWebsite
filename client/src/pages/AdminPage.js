@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/styles.css";
 import AISalesDashboard from "../components/AISalesDashboard";
@@ -7,7 +7,7 @@ import {
   FaBox, FaShoppingBag, FaPlus, FaEdit, FaTrash, FaEye, 
   FaChartLine, FaChartBar, FaRobot, FaCrown, FaSignOutAlt,
   FaTags, FaUsers, FaMoneyBillWave, FaClock, FaTruck, FaTimesCircle,
-  FaCheckCircle, FaSpinner
+  FaCheckCircle, FaSpinner, FaCloudUploadAlt, FaImage
 } from "react-icons/fa";
 
 const AdminPage = () => {
@@ -20,6 +20,9 @@ const AdminPage = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [activeTab, setActiveTab] = useState("products");
   const [activeSection, setActiveSection] = useState("analytics");
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
+  const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -89,6 +92,98 @@ const AdminPage = () => {
       setMessage({ text: "Error fetching orders.", type: "error" });
     } finally {
       setOrderLoading(false);
+    }
+  };
+
+  // Drag & Drop Image Upload Functions
+  const uploadImage = async (file) => {
+    if (!file || !file.type.startsWith('image/')) {
+      setMessage({ text: "Please upload an image file", type: "error" });
+      return false;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setMessage({ text: "Image too large. Max 5MB", type: "error" });
+      return false;
+    }
+
+    setUploadingImage(true);
+    const formDataImg = new FormData();
+    formDataImg.append('image', file);
+
+    try {
+      const token = localStorage.getItem("adminToken");
+      const response = await fetch("http://localhost:5000/api/admin/upload-image", {
+        method: "POST",
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formDataImg
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFormData(prev => ({ ...prev, image: data.imageUrl }));
+        setMessage({ text: "✅ Image uploaded successfully!", type: "success" });
+        setTimeout(() => setMessage({ text: "", type: "" }), 2000);
+        return true;
+      } else {
+        setMessage({ text: "Failed to upload image", type: "error" });
+        return false;
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      setMessage({ text: "Error uploading image", type: "error" });
+      return false;
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  // Handle image paste (Ctrl+V)
+  const handlePaste = async (e) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const file = items[i].getAsFile();
+        await uploadImage(file);
+        break;
+      }
+    }
+  };
+
+  // Handle drag over
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragActive(true);
+  };
+
+  // Handle drag leave
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setDragActive(false);
+  };
+
+  // Handle drop
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    setDragActive(false);
+    
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      await uploadImage(file);
+    } else {
+      setMessage({ text: "Please drop an image file", type: "error" });
+    }
+  };
+
+  // Handle file select
+  const handleFileSelect = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      await uploadImage(file);
     }
   };
 
@@ -597,18 +692,102 @@ const AdminPage = () => {
                     <input type="number" name="quantity" value={formData.quantity} onChange={handleInputChange} min="0" required className="w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all" placeholder="0" />
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-2">Image URL</label>
-                    <input type="text" name="image" value={formData.image} onChange={handleInputChange} className="w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all" placeholder="https://example.com/image.jpg" />
+                    <label className="block text-gray-300 text-sm mb-2">Sale</label>
+                    <label className="flex items-center gap-2 cursor-pointer group mt-2">
+                      <input type="checkbox" name="sale" checked={formData.sale} onChange={handleInputChange} className="w-4 h-4 rounded border-white/20 bg-white/10 text-purple-600 focus:ring-purple-500" />
+                      <span className="text-gray-300 group-hover:text-white transition-colors">🔥 On Sale (-20%)</span>
+                    </label>
                   </div>
                 </div>
-                <div className="flex items-center gap-4 mb-5">
-                  <label className="flex items-center gap-2 cursor-pointer group">
-                    <input type="checkbox" name="sale" checked={formData.sale} onChange={handleInputChange} className="w-4 h-4 rounded border-white/20 bg-white/10 text-purple-600 focus:ring-purple-500" />
-                    <span className="text-gray-300 group-hover:text-white transition-colors">🔥 On Sale (-20%)</span>
-                  </label>
+
+                {/* DRAG & DROP IMAGE UPLOAD SECTION */}
+                <div className="mb-4">
+                  <label className="block text-gray-300 text-sm mb-2">Product Image</label>
+                  
+                  {/* Drag & Drop Area */}
+                  <div
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    onPaste={handlePaste}
+                    className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all duration-300 cursor-pointer
+                      ${dragActive 
+                        ? "border-purple-500 bg-purple-500/20" 
+                        : "border-white/30 bg-white/5 hover:border-purple-500/50 hover:bg-white/10"
+                      }
+                      ${uploadingImage ? "opacity-50 pointer-events-none" : ""}
+                    `}
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleFileSelect}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                    
+                    {uploadingImage ? (
+                      <div className="flex flex-col items-center gap-2">
+                        <FaSpinner className="text-purple-400 text-3xl animate-spin" />
+                        <p className="text-white text-sm">Uploading image...</p>
+                      </div>
+                    ) : formData.image ? (
+                      <div className="flex flex-col items-center gap-3">
+                        <img 
+                          src={formData.image} 
+                          alt="Preview" 
+                          className="w-32 h-32 object-cover rounded-lg border-2 border-purple-500"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setFormData(prev => ({ ...prev, image: "" }));
+                            }}
+                            className="text-red-400 text-sm hover:text-red-300"
+                          >
+                            Remove
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              fileInputRef.current?.click();
+                            }}
+                            className="text-purple-400 text-sm hover:text-purple-300"
+                          >
+                            Change
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-2">
+                        <FaCloudUploadAlt className="text-purple-400 text-4xl" />
+                        <p className="text-white font-medium">Drag & Drop image here</p>
+                        <p className="text-gray-400 text-sm">or click to browse</p>
+                        <p className="text-gray-500 text-xs">Supports: JPG, PNG, GIF, WEBP (Max 5MB)</p>
+                        <p className="text-gray-500 text-xs">💡 Tip: You can also Ctrl+V to paste image</p>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Manual URL input (optional) */}
+                  <div className="mt-3">
+                    <input
+                      type="text"
+                      name="image"
+                      value={formData.image}
+                      onChange={handleInputChange}
+                      placeholder="Or paste image URL here"
+                      className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
+                    />
+                  </div>
                 </div>
+
                 <div className="flex gap-3 flex-wrap">
-                  <button type="submit" className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/25">
+                  <button type="submit" disabled={uploadingImage} className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/25 disabled:opacity-50">
                     {editingProduct ? "Update Product" : "Add Product"}
                   </button>
                   <button type="button" onClick={generateDescription} className="px-6 py-2.5 bg-purple-600/50 hover:bg-purple-600 text-white rounded-lg font-semibold transition-all flex items-center gap-2">
@@ -619,7 +798,7 @@ const AdminPage = () => {
               </form>
             </div>
 
-            {/* Products Table */}
+            {/* Products Table - SAME AS BEFORE */}
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 hover:border-purple-500/30 transition-all">
               <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
                 <h2 className="text-xl font-bold text-white flex items-center gap-2"><FaBox /> Product List ({products.length})</h2>
@@ -678,7 +857,7 @@ const AdminPage = () => {
             </div>
           </>
         ) : (
-          // Orders Tab Content
+          // Orders Tab Content - SAME AS BEFORE
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 hover:border-purple-500/30 transition-all">
             <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
               <h2 className="text-xl font-bold text-white flex items-center gap-2"><FaShoppingBag /> Orders ({orders.length})</h2>
