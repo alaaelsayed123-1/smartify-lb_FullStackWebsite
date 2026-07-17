@@ -72,10 +72,17 @@ const ProductsPage = ({ addToCart, addToFavorites }) => {
   };
 
   const startVoiceSearch = () => {
-    if (!recognition) {
-      alert("Voice search is not supported in your browser. Please use Chrome.");
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+      alert("Please use Chrome browser!");
       return;
     }
+    
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.continuous = false;
+    recognition.interimResults = false;
     
     setIsListening(true);
     
@@ -85,9 +92,9 @@ const ProductsPage = ({ addToCart, addToFavorites }) => {
       setIsListening(false);
     };
     
-    recognition.onerror = () => {
+    recognition.onerror = (event) => {
+      console.log('Error:', event.error);
       setIsListening(false);
-      alert("Could not hear you. Please try again.");
     };
     
     recognition.onend = () => {
@@ -98,10 +105,7 @@ const ProductsPage = ({ addToCart, addToFavorites }) => {
   };
 
   const stopVoiceSearch = () => {
-    if (recognition) {
-      recognition.stop();
-      setIsListening(false);
-    }
+    setIsListening(false);
   };
 
   const clearSearch = () => {

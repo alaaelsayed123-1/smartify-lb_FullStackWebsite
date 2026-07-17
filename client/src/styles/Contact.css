@@ -1,0 +1,1220 @@
+/* ============================================================ */
+/* CONTACT PAGE STYLES - SMARTIFY LB (ULTRA PREMIUM DESIGN)      */
+/* ============================================================ */
+/* All styles for the Contact page component                     */
+/* Includes: Animations, grid background, parallax effects,      */
+/* form styling, FAQ accordion, responsive design                */
+/* ============================================================ */
+
+/* ============================================================ */
+/* KEYFRAME ANIMATIONS                                           */
+/* ============================================================ */
+
+/* Fade-in animation for step transitions and FAQ answers */
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* Horizontal sliding animation for decorative lines */
+@keyframes slideRight {
+  from { 
+    transform: translateX(-100%); 
+  }
+  to { 
+    transform: translateX(100%); 
+  }
+}
+
+/* ============================================================ */
+/* MAIN PAGE CONTAINER                                           */
+/* ============================================================ */
+
+.contact-page {
+  min-height: 100vh;
+  background-color: #0a0a0f;
+  color: white;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ============================================================ */
+/* FIXED BACKGROUND ELEMENTS                                     */
+/* ============================================================ */
+
+/* Grid Background - subtle dot grid pattern for depth */
+.grid-background {
+  position: fixed;
+  inset: 0;
+  opacity: 0.03;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Mouse Follow Gradient - large purple glow that follows cursor */
+.mouse-glow {
+  position: fixed;
+  pointer-events: none;
+  transition: all 1s ease-out;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.06) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+/* Animated Lines Container - holds the sliding horizontal lines */
+.animated-lines-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Individual animated line */
+.animated-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(168, 85, 247, 0.2), transparent);
+  left: -50%;
+  right: -50%;
+  animation: slideRight linear infinite;
+}
+
+/* ============================================================ */
+/* MAIN CONTENT WRAPPER WITH FADE TRANSITION                     */
+/* ============================================================ */
+
+.main-content {
+  position: relative;
+  z-index: 10;
+  transition: all 1s;
+}
+
+.main-content.visible {
+  opacity: 1;
+}
+
+.main-content.hidden {
+  opacity: 0;
+}
+
+/* ============================================================ */
+/* HEADER SECTION                                                */
+/* ============================================================ */
+
+.header-section {
+  position: relative;
+  padding-top: 6rem;
+  padding-bottom: 4rem;
+}
+
+/* Purple/blue gradient glow behind header */
+.header-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 400px;
+  background: linear-gradient(to bottom, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.1), transparent);
+  filter: blur(64px);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  text-align: center;
+  position: relative;
+}
+
+/* Status Indicator - green dot showing availability */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 9999px;
+  margin-bottom: 2rem;
+}
+
+/* Pulsing green dot */
+.status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: rgb(74, 222, 128);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.status-text {
+  color: rgb(74, 222, 128);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Main heading with gradient text */
+.main-heading {
+  font-size: 3.75rem;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  margin-bottom: 1.5rem;
+}
+
+.gradient-text {
+  background: linear-gradient(to right, white, rgb(233, 213, 255), rgb(191, 219, 254));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sub-heading {
+  font-size: 1.25rem;
+  color: rgb(156, 163, 175);
+  max-width: 48rem;
+  margin: 0 auto;
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+.highlight-text {
+  color: rgb(192, 132, 252);
+  font-weight: 500;
+}
+
+/* Responsive heading sizes */
+@media (min-width: 768px) {
+  .main-heading {
+    font-size: 4.5rem;
+  }
+  .sub-heading {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .main-heading {
+    font-size: 6rem;
+  }
+}
+
+/* ============================================================ */
+/* STATS BAR SECTION                                             */
+/* ============================================================ */
+
+.stats-section {
+  max-width: 1200px;
+  margin: 0 auto 5rem;
+  padding: 0 1rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Individual stat card */
+.stat-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.5s;
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Gradient overlay that appears on hover */
+.stat-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent, transparent);
+  border-radius: 1rem;
+  transition: all 0.5s;
+}
+
+.stat-card:hover .stat-card-overlay {
+  background: linear-gradient(to bottom, rgba(139, 92, 246, 0.05), transparent);
+}
+
+.stat-card-content {
+  position: relative;
+}
+
+.stat-icon {
+  color: rgb(192, 132, 252);
+  font-size: 1.5rem;
+  margin: 0 auto 0.75rem;
+  transition: transform 0.3s;
+}
+
+.stat-card:hover .stat-icon {
+  transform: scale(1.1);
+}
+
+.stat-value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  color: rgb(107, 114, 128);
+  font-size: 0.875rem;
+}
+
+/* ============================================================ */
+/* MAIN CONTENT LAYOUT                                           */
+/* ============================================================ */
+
+.main-layout {
+  max-width: 1200px;
+  margin: 0 auto 5rem;
+  padding: 0 1rem;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+  .content-grid {
+    grid-template-columns: 5fr 7fr;
+  }
+}
+
+/* ============================================================ */
+/* LEFT COLUMN - CONTACT INFORMATION                             */
+/* ============================================================ */
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Contact Cards Section */
+.contact-cards-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.section-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(107, 114, 128);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+/* Individual contact card */
+.contact-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: all 0.5s;
+}
+
+.contact-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Colored left border accent */
+.card-accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+/* Color variants for card accents */
+.bg-gradient-blue {
+  background: linear-gradient(to bottom, rgb(59, 130, 246), rgb(37, 99, 235));
+}
+
+.bg-gradient-purple {
+  background: linear-gradient(to bottom, rgb(168, 85, 247), rgb(147, 51, 234));
+}
+
+.bg-gradient-green {
+  background: linear-gradient(to bottom, rgb(34, 197, 94), rgb(22, 163, 74));
+}
+
+.bg-gradient-orange {
+  background: linear-gradient(to bottom, rgb(249, 115, 22), rgb(234, 88, 12));
+}
+
+.card-inner {
+  padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Icon container with colored border */
+.card-icon-container {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.contact-card:hover .card-icon-container {
+  transform: scale(1.1);
+}
+
+/* Icon color variants */
+.text-blue {
+  color: rgb(96, 165, 250);
+}
+
+.text-purple {
+  color: rgb(192, 132, 252);
+}
+
+.text-green {
+  color: rgb(74, 222, 128);
+}
+
+.text-orange {
+  color: rgb(251, 146, 60);
+}
+
+.card-icon {
+  font-size: 1.125rem;
+}
+
+.card-text {
+  flex: 1;
+}
+
+.card-label {
+  font-size: 0.75rem;
+  color: rgb(107, 114, 128);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.card-value {
+  color: white;
+  font-weight: 600;
+  margin-top: 0.125rem;
+}
+
+.card-sub {
+  color: rgb(107, 114, 128);
+  font-size: 0.75rem;
+  margin-top: 0.125rem;
+}
+
+/* ============================================================ */
+/* BUSINESS HOURS CARD                                           */
+/* ============================================================ */
+
+.hours-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.hours-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.hours-icon {
+  color: rgb(251, 146, 60);
+}
+
+.hours-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hours-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.hours-row:last-child {
+  border-bottom: none;
+}
+
+.hours-day {
+  color: rgb(156, 163, 175);
+  font-size: 0.875rem;
+}
+
+.hours-time {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.hours-time.active {
+  color: white;
+}
+
+.hours-time.inactive {
+  color: rgb(248, 113, 113);
+}
+
+/* Green dot for active days */
+.active-dot {
+  margin-left: 0.5rem;
+  display: inline-block;
+  width: 0.375rem;
+  height: 0.375rem;
+  background-color: rgb(74, 222, 128);
+  border-radius: 50%;
+}
+
+/* ============================================================ */
+/* SOCIAL LINKS                                                  */
+/* ============================================================ */
+
+.social-links {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.social-link {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(107, 114, 128);
+  transition: all 0.3s;
+}
+
+.social-link:hover {
+  color: rgb(192, 132, 252);
+  border-color: rgba(168, 85, 247, 0.3);
+  background: rgba(168, 85, 247, 0.05);
+}
+
+.social-icon {
+  font-size: 0.875rem;
+}
+
+/* ============================================================ */
+/* RIGHT COLUMN - CONTACT FORM                                   */
+/* ============================================================ */
+
+.right-column {
+  /* Takes remaining space in grid */
+}
+
+.form-container {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  backdrop-filter: blur(4px);
+}
+
+@media (min-width: 768px) {
+  .form-container {
+    padding: 2.5rem;
+  }
+}
+
+/* ============================================================ */
+/* FORM PROGRESS STEPS                                           */
+/* ============================================================ */
+
+.steps-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Step circle */
+.step-circle {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.3s;
+}
+
+.step-circle.active {
+  background-color: rgb(147, 51, 234);
+  color: white;
+}
+
+.step-circle.inactive {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: rgb(75, 85, 99);
+}
+
+/* Connector line between steps */
+.step-connector {
+  width: 2rem;
+  height: 2px;
+}
+
+.step-connector.active {
+  background-color: rgb(147, 51, 234);
+}
+
+.step-connector.inactive {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Current step label */
+.step-label {
+  font-size: 0.75rem;
+  color: rgb(107, 114, 128);
+  margin-left: 0.5rem;
+}
+
+/* ============================================================ */
+/* SUCCESS & ERROR MESSAGES                                      */
+/* ============================================================ */
+
+/* Success message card */
+.success-message {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(to right, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.success-icon-container {
+  width: 3rem;
+  height: 3rem;
+  background: rgba(34, 197, 94, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.success-icon {
+  color: rgb(74, 222, 128);
+  font-size: 1.25rem;
+}
+
+.success-title {
+  color: rgb(74, 222, 128);
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.success-text {
+  color: rgba(134, 239, 172, 0.7);
+  margin-top: 0.25rem;
+}
+
+/* Error message card */
+.error-message {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 1rem;
+}
+
+.error-text {
+  color: rgb(248, 113, 113);
+  font-size: 0.875rem;
+}
+
+/* ============================================================ */
+/* FORM ELEMENTS                                                 */
+/* ============================================================ */
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Step content with fade animation */
+.step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Form group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Form labels */
+.form-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgb(107, 114, 128);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.optional-label {
+  color: rgb(75, 85, 99);
+}
+
+/* Two-column row for name/email */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Base input styles */
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 1rem;
+  color: white;
+  transition: all 0.3s;
+  outline: none;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: rgb(75, 85, 99);
+}
+
+/* Default input border */
+.input-default {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Error state */
+.input-error {
+  border: 1px solid rgba(239, 68, 68, 0.5);
+}
+
+/* Focus state colors */
+.input-focused-blue {
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+.input-focused-purple {
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.25);
+}
+
+.input-focused-green {
+  border: 1px solid rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25);
+}
+
+.input-focused-pink {
+  border: 1px solid rgba(236, 72, 153, 0.5);
+  box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.25);
+}
+
+.input-focused-orange {
+  border: 1px solid rgba(249, 115, 22, 0.5);
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.25);
+}
+
+/* Select specific styles */
+.form-select {
+  cursor: pointer;
+  appearance: none;
+}
+
+.select-option {
+  background-color: rgb(17, 24, 39);
+}
+
+/* Textarea specific styles */
+.form-textarea {
+  resize: none;
+}
+
+.textarea-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+/* Field error text */
+.field-error {
+  color: rgb(248, 113, 113);
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* Character count */
+.char-count {
+  color: rgb(75, 85, 99);
+  font-size: 0.75rem;
+  margin-left: auto;
+}
+
+/* ============================================================ */
+/* FORM BUTTONS                                                  */
+/* ============================================================ */
+
+/* Button row for back/next pairs */
+.button-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Continue button (Step 1) */
+.btn-continue {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-continue:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Back button */
+.btn-back {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgb(156, 163, 175);
+  padding: 1rem;
+  border-radius: 1rem;
+  font-weight: 500;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.btn-back:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Review button */
+.btn-review {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-review:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Button icon (chevron) */
+.btn-icon {
+  font-size: 0.875rem;
+}
+
+/* Edit button (Step 3) */
+.btn-edit {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgb(156, 163, 175);
+  padding: 1rem;
+  border-radius: 1rem;
+  font-weight: 500;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.btn-edit:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Submit button with gradient */
+.btn-submit {
+  flex: 2;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to right, rgb(147, 51, 234), rgb(37, 99, 235));
+  color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  font-weight: 700;
+  font-size: 1.125rem;
+  transition: all 0.5s;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
+}
+
+.btn-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Animated gradient overlay on hover */
+.btn-submit-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgb(147, 51, 234), rgb(219, 39, 119), rgb(37, 99, 235));
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.btn-submit:hover .btn-submit-overlay {
+  opacity: 1;
+}
+
+.btn-submit-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+/* Submit button icon animation */
+.btn-submit-icon {
+  transition: transform 0.3s;
+}
+
+.btn-submit:hover .btn-submit-icon {
+  transform: translateX(4px);
+}
+
+/* ============================================================ */
+/* LOADING SPINNER                                               */
+/* ============================================================ */
+
+.spinner {
+  animation: spin 1s linear infinite;
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spinner-track {
+  opacity: 0.25;
+}
+
+.spinner-path {
+  opacity: 0.75;
+}
+
+/* ============================================================ */
+/* REVIEW CARD (STEP 3)                                          */
+/* ============================================================ */
+
+.review-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.review-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(156, 163, 175);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.review-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.review-row:last-of-type {
+  border-bottom: none;
+}
+
+.review-label {
+  color: rgb(107, 114, 128);
+  font-size: 0.875rem;
+}
+
+.review-value {
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Message preview in review */
+.review-message {
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.review-message-label {
+  color: rgb(107, 114, 128);
+  font-size: 0.875rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.review-message-text {
+  color: white;
+  font-size: 0.875rem;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1rem;
+  border-radius: 0.75rem;
+}
+
+/* ============================================================ */
+/* FAQ SECTION                                                   */
+/* ============================================================ */
+
+.faq-section {
+  max-width: 1200px;
+  margin: 0 auto 5rem;
+  padding: 0 1rem;
+}
+
+.faq-container {
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.faq-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.faq-heading {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.faq-subheading {
+  color: rgb(107, 114, 128);
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Individual FAQ item */
+.faq-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+/* FAQ question button */
+.faq-question {
+  width: 100%;
+  padding: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.faq-question:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.faq-question-text {
+  font-weight: 500;
+}
+
+/* FAQ toggle icon (+ that rotates to x) */
+.faq-toggle {
+  color: rgb(107, 114, 128);
+  transition: transform 0.3s;
+}
+
+.faq-toggle.active {
+  transform: rotate(45deg);
+}
+
+/* FAQ answer */
+.faq-answer {
+  padding: 0 1.25rem 1.25rem;
+  color: rgb(156, 163, 175);
+  font-size: 0.875rem;
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* ============================================================ */
+/* CTA / QUOTE SECTION                                           */
+/* ============================================================ */
+
+.cta-section {
+  max-width: 1200px;
+  margin: 0 auto 5rem;
+  padding: 0 1rem;
+}
+
+.cta-container {
+  max-width: 56rem;
+  margin: 0 auto;
+  text-align: center;
+  background: linear-gradient(to right, rgba(147, 51, 234, 0.1), rgba(59, 130, 246, 0.1));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.5rem;
+  padding: 3rem;
+}
+
+.cta-quote-icon {
+  color: rgb(192, 132, 252);
+  font-size: 1.875rem;
+  margin: 0 auto 1.5rem;
+  opacity: 0.5;
+}
+
+.cta-quote {
+  font-size: 1.5rem;
+  color: white;
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.cta-founder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+/* Founder avatar placeholder */
+.founder-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: linear-gradient(to bottom right, rgb(168, 85, 247), rgb(59, 130, 246));
+  border-radius: 50%;
+}
+
+.founder-info {
+  text-align: left;
+}
+
+.founder-name {
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.founder-title {
+  color: rgb(107, 114, 128);
+  font-size: 0.75rem;
+}

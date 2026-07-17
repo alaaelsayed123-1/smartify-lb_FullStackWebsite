@@ -176,7 +176,6 @@ const AdminLogin = () => {
         <div className="mt-6 text-center">
           <div className="inline-block bg-black/20 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/10">
             <p className="text-purple-200 text-xs">
-              <span className="font-semibold">Demo:</span> admin@smartify.com / admin123
             </p>
           </div>
         </div>

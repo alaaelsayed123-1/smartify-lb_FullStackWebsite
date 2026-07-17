@@ -75,7 +75,7 @@ const Footer = () => {
             </p>
             <div className="flex items-center gap-2 text-sm text-gray-400">
               <FaHeart className="text-pink-500" />
-              <span>Making tech accessible since 2024</span>
+              <span>Making tech accessible since 2026</span>
             </div>
           </div>
 
@@ -116,15 +116,15 @@ const Footer = () => {
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3 text-gray-400 text-sm group">
                 <FaEnvelope className="group-hover:text-purple-400 transition-colors" />
-                <span>support@smartify.com</span>
+                <span>alaaalsayed003@gmail.com</span>
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm group">
                 <FaPhone className="group-hover:text-purple-400 transition-colors" />
-                <span>+1 (555) 123-4567</span>
+                <span>+961 76 883 284</span>
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm group">
                 <FaMapMarkerAlt className="group-hover:text-purple-400 transition-colors" />
-                <span>123 Tech Street, Silicon Valley, CA</span>
+                <span>Lebanon ,Tyre</span>
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm group">
                 <FaClock className="group-hover:text-purple-400 transition-colors" />
@@ -224,7 +224,7 @@ const Footer = () => {
       )}
 
       {/* Custom CSS */}
-      <style jsx>{`
+<style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px) translateX(0px); }
           50% { transform: translateY(-20px) translateX(10px); }

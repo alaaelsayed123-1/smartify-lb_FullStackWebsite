@@ -1,48 +1,72 @@
+// Import React hooks for state and side effects
 import React, { useState, useEffect } from "react";
+// useNavigate for programmatic page navigation
 import { useNavigate } from "react-router-dom";
+// Import icons for UI elements
 import { 
   FaHeart, FaShoppingCart, FaTrash, FaStar, FaStarHalfAlt, 
   FaArrowLeft, FaTimes, FaBoxOpen, FaGem, FaFire, FaTag
 } from "react-icons/fa";
 
 const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
+  // Hook for navigating between pages
   const navigate = useNavigate();
+  
+  // Track which items have been added to cart (for button feedback)
   const [addedStates, setAddedStates] = useState({});
+  // Track which items are being removed (for animation feedback)
   const [removedStates, setRemovedStates] = useState({});
+  // Track which item is currently being hovered (for overlay effects)
   const [hoveredItem, setHoveredItem] = useState(null);
 
+  // Handle adding a product to cart
   const handleAddToCart = (item) => {
-    addToCart(item);
-    setAddedStates(prev => ({ ...prev, [item.id]: true }));
-    setTimeout(() => setAddedStates(prev => ({ ...prev, [item.id]: false })), 1500);
+    // Create product object with correct ID reference
+    const productToAdd = {
+        ...item,
+        id: item.product_id || item.id  // Use product_id from favorites, fallback to id
+    };
+    // Call parent function to add to cart (inserts into database)
+    addToCart(productToAdd);
+    // Show "Added!" feedback for 1.5 seconds
+    setAddedStates(prev => ({ ...prev, [item.product_id || item.id]: true }));
+    setTimeout(() => setAddedStates(prev => ({ ...prev, [item.product_id || item.id]: false })), 1500);
   };
 
+  // Handle removing a product from favorites
   const handleRemove = async (item) => {
+    // Show "Removed!" feedback immediately
     setRemovedStates(prev => ({ ...prev, [item.id]: true }));
+    // Call parent function to remove from database
     await removeFromFavorites(item.product_id);
+    // Clear feedback state after 500ms
     setTimeout(() => setRemovedStates(prev => ({ ...prev, [item.id]: false })), 500);
   };
 
-  // Generate random rating for each product (4-5 stars for premium feel)
+  // Generate a consistent random rating per product (4-5 stars for premium feel)
   const getRating = (id) => {
     const ratings = {};
     if (!ratings[id]) {
-      ratings[id] = 4 + Math.random();
+      ratings[id] = 4 + Math.random(); // Random between 4.0 and 5.0
     }
     return ratings[id];
   };
 
+  // Render star rating icons based on number
   const renderStars = (rating) => {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-    const emptyStars = 5 - Math.ceil(rating);
+    const fullStars = Math.floor(rating);        // Count of full stars
+    const hasHalfStar = rating % 1 >= 0.5;       // Check for half star
+    const emptyStars = 5 - Math.ceil(rating);     // Remaining empty stars
     
     return (
       <div className="flex items-center gap-0.5">
+        {/* Full yellow stars */}
         {[...Array(fullStars)].map((_, i) => (
           <FaStar key={`full-${i}`} className="text-yellow-400 text-sm" />
         ))}
+        {/* Half star if needed */}
         {hasHalfStar && <FaStarHalfAlt className="text-yellow-400 text-sm" />}
+        {/* Empty gray stars */}
         {[...Array(emptyStars)].map((_, i) => (
           <FaStar key={`empty-${i}`} className="text-gray-600 text-sm" />
         ))}
@@ -50,16 +74,18 @@ const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
     );
   };
 
+  // EMPTY STATE: Show when no favorites exist
   if (!favorites || favorites.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-900 to-gray-900 flex items-center justify-center relative overflow-hidden">
-        {/* Animated Background Elements */}
+        {/* Animated background blobs for visual appeal */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
           <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-red-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-1000"></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse delay-500"></div>
         </div>
 
+        {/* Centered empty state message */}
         <div className="relative text-center z-10 animate-fade-in-up">
           <div className="relative inline-block">
             <FaHeart className="text-7xl text-pink-500 mb-6 animate-pulse-slow" />
@@ -71,6 +97,7 @@ const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
           <p className="text-gray-300 text-lg mb-8 max-w-md mx-auto">
             Start adding products you love to your favorites collection!
           </p>
+          {/* CTA button to browse products */}
           <button 
             onClick={() => navigate("/products")}
             className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-pink-600 to-red-600 text-white rounded-2xl font-semibold text-lg shadow-2xl shadow-pink-500/30 hover:shadow-pink-500/50 transition-all duration-300 hover:transform hover:-translate-y-1 overflow-hidden"
@@ -87,20 +114,22 @@ const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
     );
   }
 
+  // MAIN VIEW: Display favorites grid
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-900 to-gray-900 relative overflow-hidden">
-      {/* Animated Background */}
+      {/* Animated background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float"></div>
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-red-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float-delayed"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-5 animate-pulse"></div>
       </div>
 
-      {/* Header */}
+      {/* Header bar with back button and count */}
       <div className="relative bg-white/10 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50">
         <div className="container mx-auto px-6 py-6">
           <div className="flex justify-between items-center flex-wrap gap-4">
             <div className="flex items-center gap-4">
+              {/* Back navigation button */}
               <button 
                 onClick={() => navigate(-1)}
                 className="p-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-all duration-300 hover:transform hover:-translate-x-1"
@@ -116,6 +145,7 @@ const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
                 </p>
               </div>
             </div>
+            {/* Wishlist badge */}
             <div className="flex items-center gap-3">
               <div className="bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
                 <span className="text-pink-300 text-sm">❤️ Wishlist</span>
@@ -125,23 +155,26 @@ const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
         </div>
       </div>
 
-      {/* Favorites Grid */}
+      {/* Product cards grid */}
       <div className="relative container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {favorites.map((item, index) => {
-            const rating = getRating(item.id);
-            const isOnSale = item.sale === 1 || item.sale === true;
-            const salePrice = isOnSale ? (parseFloat(item.price) * 0.8).toFixed(2) : null;
-            
-            return (
+        {favorites.map((item, index) => {
+    // Debug log to check product data
+    console.log(`Product: ${item.name}, Quantity: ${item.quantity}`, item);
+    
+    const rating = getRating(item.id);
+    const isOnSale = item.sale === 1 || item.sale === true;
+    const salePrice = isOnSale ? (parseFloat(item.price) * 0.8).toFixed(2) : null;
+    
+    return (
               <div
                 key={item.id}
                 className="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden shadow-xl transition-all duration-500 hover:transform hover:-translate-y-3 hover:shadow-2xl hover:shadow-pink-500/20 animate-fade-in-up"
-                style={{ animationDelay: `${index * 100}ms` }}
+                style={{ animationDelay: `${index * 100}ms` }} // Staggered animation
                 onMouseEnter={() => setHoveredItem(item.id)}
                 onMouseLeave={() => setHoveredItem(null)}
               >
-                {/* Sale Badge */}
+                {/* Sale badge - shows 20% OFF */}
                 {isOnSale && (
                   <div className="absolute top-4 right-4 z-20 animate-pulse-slow">
                     <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-lg">
@@ -151,12 +184,12 @@ const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
                   </div>
                 )}
 
-                {/* Image Container */}
+                {/* Product image container */}
                 <div className="relative overflow-hidden bg-gradient-to-br from-gray-700 to-gray-800 h-64">
                   <img
                     src={item.image && item.image !== "" && item.image !== "null" && item.image !== "undefined" 
                       ? (item.image.startsWith('http') ? item.image : `/${item.image}`)
-                      : `https://picsum.photos/400/300?random=${item.id}`}
+                      : `https://picsum.photos/400/300?random=${item.id}`} // Fallback image
                     alt={item.name}
                     className={`w-full h-full object-cover transition-all duration-700 ${hoveredItem === item.id ? 'scale-110 blur-sm' : 'scale-100'}`}
                     onError={(e) => {
@@ -164,17 +197,19 @@ const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
                     }}
                   />
                   
-                  {/* Hover Overlay */}
+                  {/* Gradient overlay on hover */}
                   <div className={`absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent transition-opacity duration-300 ${hoveredItem === item.id ? 'opacity-100' : 'opacity-0'}`}></div>
                   
-                  {/* Quick Actions Overlay */}
+                  {/* Quick action buttons - appear on hover */}
                   <div className={`absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center gap-4 transition-all duration-300 ${hoveredItem === item.id ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                    {/* Add to Cart button */}
                     <button
                       onClick={() => handleAddToCart(item)}
                       className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-3 rounded-full transform transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-green-500/25"
                     >
                       <FaShoppingCart size={20} />
                     </button>
+                    {/* Remove from Favorites button */}
                     <button
                       onClick={() => handleRemove(item)}
                       className="bg-gradient-to-r from-red-600 to-rose-600 text-white p-3 rounded-full transform transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-red-500/25"
@@ -184,19 +219,20 @@ const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
                   </div>
                 </div>
 
-                {/* Content */}
+                {/* Product info section */}
                 <div className="p-5 space-y-3">
-                  {/* Title */}
+                  {/* Product name */}
                   <h3 className="text-white font-bold text-lg line-clamp-1 group-hover:text-pink-400 transition-colors">
                     {item.name}
                   </h3>
 
-                  {/* Rating */}
+                  {/* Star rating and stock warning */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       {renderStars(rating)}
                       <span className="text-gray-400 text-xs">({(rating * 20).toFixed(0)}+ reviews)</span>
                     </div>
+                    {/* Low stock warning badge */}
                     {item.quantity <= 10 && item.quantity > 0 && (
                       <span className="text-orange-400 text-xs font-semibold bg-orange-500/20 px-2 py-0.5 rounded-full">
                         ⚡ Low Stock
@@ -204,30 +240,34 @@ const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
                     )}
                   </div>
 
-                  {/* Price */}
+                  {/* Price display */}
                   <div className="space-y-1">
                     {isOnSale && salePrice ? (
                       <div className="flex items-baseline gap-2 flex-wrap">
+                        {/* Original price with strikethrough */}
                         <span className="text-gray-400 text-sm line-through">
                           ${parseFloat(item.price).toFixed(2)}
                         </span>
                         <div className="flex items-center gap-2">
+                          {/* Sale price */}
                           <span className="text-green-400 font-bold text-2xl">
                             ${salePrice}
                           </span>
+                          {/* Savings badge */}
                           <span className="bg-green-500/20 text-green-400 text-xs px-2 py-0.5 rounded-full font-semibold">
                             Save ${(parseFloat(item.price) - parseFloat(salePrice)).toFixed(2)}
                           </span>
                         </div>
                       </div>
                     ) : (
+                      // Regular price
                       <div className="text-green-400 font-bold text-2xl">
                         ${parseFloat(item.price).toFixed(2)}
                       </div>
                     )}
                   </div>
 
-                  {/* Stock Status */}
+                  {/* Stock status indicator */}
                   <div className="flex items-center gap-2 pt-1">
                     <div className={`w-2 h-2 rounded-full ${
                       item.quantity > 10 ? 'bg-green-500 animate-pulse' : 
@@ -245,8 +285,9 @@ const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
                     </span>
                   </div>
 
-                  {/* Action Buttons */}
+                  {/* Bottom action buttons */}
                   <div className="flex gap-3 pt-3">
+                    {/* Add to Cart button */}
                     <button
                       onClick={() => handleAddToCart(item)}
                       disabled={item.quantity <= 0}
@@ -262,6 +303,7 @@ const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
                       {addedStates[item.id] ? "Added!" : (item.quantity <= 0 ? "Out of Stock" : "Add to Cart")}
                     </button>
 
+                    {/* Remove button */}
                     <button
                       onClick={() => handleRemove(item)}
                       className={`flex-1 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 ${
@@ -280,23 +322,17 @@ const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
           })}
         </div>
 
-        {/* Decorative Elements */}
+        {/* Decorative gem icon */}
         <div className="fixed bottom-8 right-8 opacity-20 pointer-events-none">
           <FaGem className="text-pink-500 text-6xl animate-spin-slow" />
         </div>
       </div>
 
-      {/* Custom CSS Animations */}
+      {/* Custom CSS animations */}
       <style jsx>{`
         @keyframes fade-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         @keyframes pulse-slow {
           0%, 100% { transform: scale(1); opacity: 1; }
@@ -343,12 +379,8 @@ const FavoritesPage = ({ favorites, removeFromFavorites, addToCart }) => {
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
-        .delay-1000 {
-          animation-delay: 1s;
-        }
-        .delay-500 {
-          animation-delay: 0.5s;
-        }
+        .delay-1000 { animation-delay: 1s; }
+        .delay-500 { animation-delay: 0.5s; }
       `}</style>
     </div>
   );
