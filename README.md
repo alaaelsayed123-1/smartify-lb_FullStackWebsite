@@ -291,10 +291,7 @@ View on GitHub • Report Issue • Star ⭐
 
 Made with ❤️ for modern e-commerce
 
-</div> ```
-How to add this README:
-cmd
-cd C:\Users\user\Desktop\Smartify_lb
+
 cmd
 git add README.md
 git commit -m "Add detailed website description to README"
